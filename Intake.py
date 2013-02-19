@@ -15,5 +15,8 @@ class RobotIntake:
         pass
     
     def OperatorControl(self):
-        robot.intakeMotor.Set(0)
+        if testStick.GetRawButton(2):
+            robot.intakeMotor.Set(1)
+        else:
+            robot.intakeMotor.Set(0)
         
