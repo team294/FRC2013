@@ -50,13 +50,13 @@ class MyRobot(wpilib.SimpleRobot):
             robot.UpdateDashboard()
             wpilib.Wait(0.04)
 
-            if frame % 100 == 1:
-                print("armPot:   %f" % robot.armPot.GetAverageValue())
-                print("azPot:   %f" % robot.azimuthPot.GetAverageValue())
-                print("azEnc:   %f" % robot.azimuthEncoder.Get())
-                print("elPot:   %f" % robot.elevationPot.GetAverageValue())
-                print("lEnc:    %d" % robot.leftDriveEncoder.Get())
-                print("rEnc:    %d" % robot.rightDriveEncoder.Get())
+            #if frame % 100 == 1:
+            #    print("armPot:   %f" % robot.armPot.GetAverageValue())
+            #    print("azPot:   %f" % robot.azimuthPot.GetAverageValue())
+            #    print("azEnc:   %f" % robot.azimuthEncoder.Get())
+            #    print("elPot:   %f" % robot.elevationPot.GetAverageValue())
+            #    print("lEnc:    %d" % robot.leftDriveEncoder.Get())
+            #    print("rEnc:    %d" % robot.rightDriveEncoder.Get())
             frame+= 1
 
 def run():

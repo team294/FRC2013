@@ -38,18 +38,18 @@ class RobotSystem:
             self.conveyorMotor = wpilib.Victor(2)
             self.uptakeMotorUnlimited = wpilib.Victor(3)
             self.feederMotor = wpilib.Victor(4)
-            
 
             ### Inputs
-            self.rightDriveEncoder = wpilib.Encoder(1,2)
-            self.leftDriveEncoder = wpilib.Encoder(3,4,False)
-            self.discIn = wpilib.DigitalInput(5)
-            self.discOut = wpilib.DigitalInput(6)
-            self.shooterCounter = wpilib.Counter(7)
-            self.elevationPot = wpilib.AnalogChannel(8)
+            self.rightDriveEncoder = wpilib.Encoder(2,3)
+            self.leftDriveEncoder = wpilib.Encoder(4,5,False)
+            self.discIn = wpilib.DigitalInput(6)
+            self.discOut = wpilib.DigitalInput(8)
+            self.shooterCounterBack = wpilib.Counter(9)
+            self.shooterCounterFront = wpilib.Counter(10)
+            self.uptakePot = wpilib.AnalogChannel(2)
+            self.elevationPot = wpilib.AnalogChannel(3)
 
-            ### Relays
-            self.ledRelay = wpilib.Relay(2, wpilib.Relay.kForwardOnly)
+            self.gyro = wpilib.Gyro(1)
 
             ### Solenoids
             self.shifterUp = wpilib.Solenoid(1)
@@ -114,7 +114,6 @@ class RobotSystem:
             self.feeder.Init()
             self.uptake.Init()
             self.elevation.Init()
-            self.ledRelay.Set(wpilib.Relay.kOn)
 
             self.lastLeftButtons = [False]*12
             self.lastRightButtons = [False]*12
@@ -145,9 +144,10 @@ class RobotSystem:
 
         def UpdateDashboard(self):
             # Collect and send dashboard information
-            self.db.AddCluster()
-            self.shooter.UpdateDashboard(self.db)
-            self.db.FinalizeCluster()
-            self.db.Finalize()
+            #self.db.AddCluster()
+            #self.shooter.UpdateDashboard(self.db)
+            #self.db.FinalizeCluster()
+            #self.db.Finalize()
+            pass
 
 robot = RobotSystem.GetInstance()
