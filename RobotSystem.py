@@ -1,6 +1,6 @@
 import wpilib
 from util.DualSpeedController import *
-##from util.LimitedSpeedController import *
+from util.LimitedSpeedController import *
 from util.ProtectedSpeedController import *
 
 # Joystick controls
@@ -68,8 +68,12 @@ class RobotSystem:
             ### Limited motors
             ##self.elevationMotor = PotLimitedSpeedController(self.elevationMotorUnlimited, self.elevationPot,
                     ##"ElevationTopLimit", "ElevationBottomLimit")
-            ##self.uptakeMotor = PotLimitedSpeedController(self.uptakeMotorUnlimited, self.uptakePot,
-                    ##"UptakeBottomLimit", "UptakeTopLimit")
+            self.uptakeMotor = PotLimitedSpeedController(
+                    self.uptakeMotorUnlimited,
+                    self.uptakePot,
+                    "UptakeTopLimit",
+                    "UptakeBottomLimit",
+                    inverted=True)
 
             ### Dashboard
             self.db = wpilib.DriverStation.GetInstance().GetLowPriorityDashboardPacker()
