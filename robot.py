@@ -10,7 +10,7 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=logging.WARNING)
 class MyRobot(wpilib.SimpleRobot):
     def __init__(self):
         super().__init__()
-        #SmartDashboard.GetInstance()
+        SmartDashboard.init()
         robot.CreateSubsystems()
         #StartImageServer()
         robot.compressor.Start()
