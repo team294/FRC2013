@@ -18,6 +18,10 @@ class RobotDrive(Subsystem):
         robot.leftDriveEncoder.Reset()
 
     def Init(self):
+        robot.leftTopMotor.SetVoltageRampRate(24.0/0.2)
+        robot.leftBottomMotor.SetVoltageRampRate(24.0/0.2)
+        robot.rightTopMotor.SetVoltageRampRate(24.0/0.2)
+        robot.rightBottomMotor.SetVoltageRampRate(24.0/0.2)
         self.ResetEncoders()
 
     def ShiftDown(self):

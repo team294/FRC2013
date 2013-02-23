@@ -109,10 +109,6 @@ class RobotSystem:
         def Init(self):
             # Init subsystems
             print("Initializing")
-            self.leftTopMotor.SetVoltageRampRate(24.0/0.2)
-            self.leftBottomMotor.SetVoltageRampRate(24.0/0.2)
-            self.rightTopMotor.SetVoltageRampRate(24.0/0.2)
-            self.rightBottomMotor.SetVoltageRampRate(24.0/0.2)
             self.arm.Init()
             self.drive.Init()
             self.conveyor.Init()
