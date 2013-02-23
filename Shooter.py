@@ -16,5 +16,9 @@ class RobotShooter:
     
     
     def OperatorControl(self):
-        pass
-        
+        if testStick.GetRawButton(10):
+            robot.shooterFrontMotor.Set(testStick.GetY())
+            robot.shooterBackMotor.Set(testStick.GetY())
+        else:
+            robot.shooterFrontMotor.Set(0)   
+            robot.shooterBackMotor.Set(0)

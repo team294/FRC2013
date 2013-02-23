@@ -16,5 +16,7 @@ class RobotElevation:
     
     
     def OperatorControl(self):
-        pass
-        
+        if testStick.GetRawButton(8):
+            robot.elevationMotorUnlimited.Set(testStick.GetY())
+        else:
+            robot.elevationMotorUnlimited.Set(0)        

@@ -21,22 +21,23 @@ class RobotSystem:
         def __init__(self):
             ### Jaguars
             #Left Drive
-            self.leftFrontMotor = wpilib.CANJaguar(1)
-            self.leftRearMotor = wpilib.CANJaguar(2)
-            self.leftMotor = DualSpeedController(self.leftFrontMotor, self.leftRearMotor, 1)
+            self.leftTopMotor = wpilib.CANJaguar(7) 
+            self.leftBottomMotor = wpilib.CANJaguar(6)
+            self.leftMotor = DualSpeedController(self.leftTopMotor, self.leftBottomMotor, 1)
             #Right Drive
-            self.rightFrontMotor = wpilib.CANJaguar(3)
-            self.rightRearMotor = wpilib.CANJaguar(4)
-            self.rightMotor = DualSpeedController(self.rightFrontMotor, self.rightRearMotor, 1)
+            self.rightTopMotor = wpilib.CANJaguar(3)
+            self.rightBottomMotor = wpilib.CANJaguar(4)
+            self.rightMotor = DualSpeedController(self.rightTopMotor, self.rightBottomMotor, 1)
 
             #shooter
-            self.shooterMotor = wpilib.CANJaguar(5, wpilib.CANJaguar.kVoltage)
-            self.elevationMotorUnlimited = wpilib.CANJaguar(6)
+            self.shooterFrontMotor = wpilib.CANJaguar(1, wpilib.CANJaguar.kVoltage)
+            self.shooterBackMotor = wpilib.CANJaguar(2, wpilib.CANJaguar.kVoltage)
+            self.elevationMotorUnlimited = wpilib.CANJaguar(5)
 
             ### Victors
             self.intakeMotor = wpilib.Victor(1)
             self.conveyorMotor = wpilib.Victor(2)
-            self.uptakeMotorUnlimited = wpilib.Victor(3)
+            self.dumbyMotorUnlimited = wpilib.Victor(3)
             self.feederMotor = wpilib.Victor(4)
 
             ### Inputs
@@ -56,8 +57,10 @@ class RobotSystem:
             self.shifterDown = wpilib.Solenoid(2)
             self.armUp = wpilib.Solenoid(3)
             self.armDown = wpilib.Solenoid(4)
-            self.climb1 = wpilib.Solenoid(5)
-            self.climb2 = wpilib.Solenoid(6)
+            self.flipper1 = wpilib.Solenoid(5)
+            self.flipper2 = wpilib.Solenoid(6)
+            self.climb1 = wpilib.Solenoid(7)
+            self.climb2 = wpilib.Solenoid(8)
 
             ### Compressor
             self.compressor = wpilib.Compressor(1,1)
@@ -102,10 +105,10 @@ class RobotSystem:
         def Init(self):
             # Init subsystems
             print("Initializing")
-            self.leftFrontMotor.SetVoltageRampRate(24.0/0.2)
-            self.leftRearMotor.SetVoltageRampRate(24.0/0.2)
-            self.rightFrontMotor.SetVoltageRampRate(24.0/0.2)
-            self.rightRearMotor.SetVoltageRampRate(24.0/0.2)
+            self.leftTopMotor.SetVoltageRampRate(24.0/0.2)
+            self.leftBottomMotor.SetVoltageRampRate(24.0/0.2)
+            self.rightTopMotor.SetVoltageRampRate(24.0/0.2)
+            self.rightBottomMotor.SetVoltageRampRate(24.0/0.2)
             self.arm.Init()
             self.drive.Init()
             self.conveyor.Init()
@@ -139,6 +142,7 @@ class RobotSystem:
             self.shooter.OperatorControl()
             self.uptake.OperatorControl()
             self.feeder.OperatorControl()
+            self.elevation.OperatorControl()
 
             self.UpdateLastButtons()
 

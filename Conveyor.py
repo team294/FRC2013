@@ -14,9 +14,13 @@ class RobotConveyor:
     def Init(self):
         pass
 
-    def OperatorControl(self): 
-        if testStick.GetRawButton(3):
-            robot.conveyorMotor.Set(1) 
+    def OperatorControl(self):
+        pass
+        if testStick.GetRawButton(2):
+            robot.conveyorMotor.Set(1)
+            pass
         else:
             robot.conveyorMotor.Set(0)
+            pass
+
 
