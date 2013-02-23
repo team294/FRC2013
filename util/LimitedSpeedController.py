@@ -1,5 +1,4 @@
 import wpilib
-from Globals import *
 
 class PotLimitedSpeedController(wpilib.SpeedController):
     def __init__(self, output, pot, lowLimitPref, highLimitPref, inverted=False, failsafe=True):
@@ -14,8 +13,8 @@ class PotLimitedSpeedController(wpilib.SpeedController):
 
     def Set(self, speed, syncGroup=0):
         potValue = self.pot.GetValue()
-        lowLimit = getattr(prefs, self.lowLimitPref)
-        highLimit = getattr(prefs, self.highLimitPref)
+        lowLimit = self.prefs.GetDouble(self.lowLimitPref)
+        highLimit = self.prefs.GetDouble(self.highLimitPref)
         #if lowLimit > highLimit:
         #    lowLimit, highLimit = highLimit, lowLimit
         #print("speed: %f value: %d lowLimit: %d highLimit: %d inv: %d" % (speed, potValue, lowLimit, highLimit, self.inverted))
