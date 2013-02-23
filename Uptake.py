@@ -1,24 +1,15 @@
 import wpilib
-
 from Globals import *
-
 from RobotSystem import *
+from util import Subsystem
 
-
-
-class RobotUptake:
-
+class RobotUptake(Subsystem):
     def __init__(self):
-        pass
-
-    def Init(self):
-        pass
-
+        super().__init__()
 
     def OperatorControl(self):
         if testStick.GetRawButton(3):
-            robot.dumbyMotorUnlimited.Set(testStick.GetY())
+            robot.uptakeMotorUnlimited.Set(testStick.GetY()/2.0)
         else:
-            robot.dumbyMotorUnlimited.Set(0)
-
+            robot.uptakeMotorUnlimited.Set(0)
 

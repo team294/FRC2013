@@ -21,7 +21,7 @@ class RobotSystem:
         def __init__(self):
             ### Jaguars
             #Left Drive
-            self.leftTopMotor = wpilib.CANJaguar(7) 
+            self.leftTopMotor = wpilib.CANJaguar(7)
             self.leftBottomMotor = wpilib.CANJaguar(6)
             self.leftMotor = DualSpeedController(self.leftTopMotor, self.leftBottomMotor, 1)
             #Right Drive
@@ -37,7 +37,7 @@ class RobotSystem:
             ### Victors
             self.intakeMotor = wpilib.Victor(1)
             self.conveyorMotor = wpilib.Victor(2)
-            self.dumbyMotorUnlimited = wpilib.Victor(3)
+            self.uptakeMotorUnlimited = wpilib.Victor(3)
             self.feederMotor = wpilib.Victor(4)
 
             ### Inputs

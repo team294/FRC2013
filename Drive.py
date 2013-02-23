@@ -1,8 +1,10 @@
 import wpilib
 from RobotSystem import *
+from util import Subsystem
 
-class RobotDrive:
+class RobotDrive(Subsystem):
     def __init__(self):
+        super().__init__()
         self.drive = wpilib.RobotDrive(robot.leftMotor, robot.rightMotor)
         robot.leftDriveEncoder.Start()
         robot.rightDriveEncoder.Start()

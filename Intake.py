@@ -1,22 +1,24 @@
 import wpilib
-
 from Globals import *
-
 from RobotSystem import *
+from util import Subsystem
 
-
-
-class RobotIntake:
-
+class RobotIntake(Subsystem):
     def __init__(self):
-        pass
+        super().__init__()
 
     def Init(self):
-        pass
+        self.running = False
 
-    def OperatorControl(self):
-        if testStick.GetRawButton(11):
+    def SetOutputs(self):
+        if self.running:
             robot.intakeMotor.Set(1)
         else:
             robot.intakeMotor.Set(0)
+
+    def OperatorControl(self):
+        if testStick.GetRawButton(11) and not robot.lastTestButtons[11]:
+            self.running = not self.running
+
+        self.SetOutputs()
 

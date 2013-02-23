@@ -1,16 +1,16 @@
 import wpilib
-
 from Globals import *
 from RobotSystem import *
+from util import Subsystem
 
-class RobotArm:
-
+class RobotArm(Subsystem):
     def __init__(self):
+        super().__init__()
         self.armTimer = wpilib.Timer()
         self.armTimer.Start()
 
     def Init(self):
-        pass
+        self.armTimer.Reset()
 
     def Raise(self):
         robot.armUp.Set(True)
