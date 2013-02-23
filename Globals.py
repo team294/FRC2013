@@ -5,34 +5,36 @@ __all__ = ["prefs"]
 class Prefs:
     _types = dict(
             DriveTicksPerInch=float,
+            ShooterFrontTestVolts=float,
+            ShooterBackTestVolts=float,
              )
 
     def __init__(self):
-        self._value_cache = {}
+        self._pref = Preferences.GetInstance()
 
     def __getattr__(self, name):
-        pref = Preferences.GetInstance()
-        if pref.changed:
-            self._value_cache.clear()
-        value = self._value_cache.get(name)
-        if value is not None:
-            return value
-        value = pref.Get(name)
-        if value is None:
-            raise AttributeError
         cls = Prefs._types.get(name, eval)
-        value = cls(value)
-        self._value_cache[name] = value
+        if issubclass(cls, bool):
+            value = self._pref.GetBoolean(name)
+        elif issubclass(cls, int):
+            value = self._pref.GetLong(name)
+        elif issubclass(cls, float):
+            value = self._pref.GetDouble(name)
+        else:
+            value = cls(self._pref.GetString(name))
         return value
 
     def __setattr__(self, name, value):
         if name[0] == '_':
             object.__setattr__(self, name, value)
         else:
-            pref = Preferences.GetInstance()
             if isinstance(value, bool):
-                pref.PutBoolean(name, value)
+                self._pref.PutBoolean(name, value)
+            elif isinstance(value, int):
+                self._pref.PutLong(name, value)
+            elif isinstance(value, float):
+                self._pref.PutDouble(name, value)
             else:
-                pref.Put(name, str(value))
+                self._pref.PutString(name, str(value))
 
 prefs = Prefs()

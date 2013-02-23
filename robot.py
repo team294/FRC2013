@@ -50,7 +50,7 @@ class MyRobot(wpilib.SimpleRobot):
             robot.UpdateDashboard()
             wpilib.Wait(0.04)
 
-            if frame % 4 == 1:
+            if frame % 20 == 1:
                 print("gyroAngle:   %f" % robot.gyro.GetAngle())
                 print("dumbyPot:   %f" % robot.uptakePot.GetAverageValue())
                 print("elPot:   %f" % robot.elevationPot.GetAverageValue())

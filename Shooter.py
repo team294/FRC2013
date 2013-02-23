@@ -9,8 +9,11 @@ class RobotShooter(Subsystem):
 
     def OperatorControl(self):
         if testStick.GetRawButton(10):
-            robot.shooterFrontMotor.Set(12*testStick.GetY())
-            robot.shooterBackMotor.Set(12*testStick.GetY())
+            frontVolts = prefs.ShooterFrontTestVolts
+            backVolts = prefs.ShooterBackTestVolts
         else:
-            robot.shooterFrontMotor.Set(0)
-            robot.shooterBackMotor.Set(0)
+            frontVolts = 0
+            backVolts = 0
+
+        robot.shooterFrontMotor.Set(-frontVolts)
+        robot.shooterBackMotor.Set(-backVolts)
