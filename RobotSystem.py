@@ -77,13 +77,7 @@ class RobotSystem:
 
             ### Dashboard
             self.db = wpilib.DriverStation.GetInstance().GetLowPriorityDashboardPacker()
-
-            # last button status
-            self.lastLeftButtons = [False]*12
-            self.lastRightButtons = [False]*12
-            self.lastCoButtons = [False]*12
-            self.lastTestButtons = [False]*12
-            self.lastKinectButtons = [False]*12
+            self.ResetLastButtons()
 
         def CreateSubsystems(self):
             # Subsystems
@@ -106,22 +100,30 @@ class RobotSystem:
             self.elevation = RobotElevation()
             self.uptake = RobotUptake()
 
+            self.subsystems = [
+                    self.arm,
+                    self.drive,
+                    self.feeder,
+                    self.intake,
+                    self.shooter,
+                    self.conveyor,
+                    self.elevation,
+                    self.uptake,
+                    ]
+
         def Init(self):
             # Init subsystems
             print("Initializing")
-            self.arm.Init()
-            self.drive.Init()
-            self.conveyor.Init()
-            self.intake.Init()
-            self.shooter.Init()
-            self.feeder.Init()
-            self.uptake.Init()
-            self.elevation.Init()
+            for ss in self.subsystems:
+                ss.Init()
 
+        def ResetLastButtons(self):
+            # last button status
             self.lastLeftButtons = [False]*12
             self.lastRightButtons = [False]*12
             self.lastCoButtons = [False]*12
             self.lastTestButtons = [False]*12
+            self.lastKinectButtons = [False]*12
 
         def UpdateLastButtons(self):
             for i in range(11):
@@ -129,22 +131,6 @@ class RobotSystem:
                 self.lastRightButtons[i+1] = rightStick.GetRawButton(i+1)
                 self.lastCoButtons[i+1] = coStick.GetRawButton(i+1)
                 self.lastTestButtons[i+1] = testStick.GetRawButton(i+1)
-
-        def Disabled(self):
-            self.UpdateLastButtons()
-
-        def OperatorControl(self):
-            # Run subsystems
-            self.arm.OperatorControl()
-            self.drive.OperatorControl()
-            self.conveyor.OperatorControl()
-            self.intake.OperatorControl()
-            self.shooter.OperatorControl()
-            self.uptake.OperatorControl()
-            self.feeder.OperatorControl()
-            self.elevation.OperatorControl()
-
-            self.UpdateLastButtons()
 
         def UpdateDashboard(self):
             # Collect and send dashboard information

@@ -1,6 +1,7 @@
 import wpilib
 from RobotSystem import *
 from util import Subsystem
+import threading
 
 class RobotDrive(Subsystem):
     def __init__(self):
@@ -13,6 +14,11 @@ class RobotDrive(Subsystem):
         self.shiftTimer = wpilib.Timer()
         self.shiftTimer.Start()
 
+        self.shiftLock = threading.Lock()
+        self.resetShiftThread = threading.Thread(target=self._ResetShiftThread,
+                name="ResetShiftThread")
+        self.resetShiftThread.start()
+
     def ResetEncoders(self):
         robot.rightDriveEncoder.Reset()
         robot.leftDriveEncoder.Reset()
@@ -24,19 +30,25 @@ class RobotDrive(Subsystem):
         robot.rightBottomMotor.SetVoltageRampRate(24.0/0.2)
         self.ResetEncoders()
 
+    def _ResetShiftThread(self):
+        while 1:
+            with self.shiftLock:
+                if self.shiftTimer.Get() > 0.2:
+                    robot.shifterUp.Set(False)
+                    robot.shifterDown.Set(False)
+            wpilib.Wait(0.1)
+
     def ShiftDown(self):
-        robot.shifterUp.Set(False)
-        robot.shifterDown.Set(True)
-        self.shiftTimer.Reset()
+        with self.shiftLock:
+            robot.shifterUp.Set(False)
+            robot.shifterDown.Set(True)
+            self.shiftTimer.Reset()
 
     def ShiftUp(self):
-        robot.shifterUp.Set(True)
-        robot.shifterDown.Set(False)
-        self.shiftTimer.Reset()
-
-    def ResetShift(self):
-        robot.shifterUp.Set(False)
-        robot.shifterDown.Set(False)
+        with self.shiftLock:
+            robot.shifterUp.Set(True)
+            robot.shifterDown.Set(False)
+            self.shiftTimer.Reset()
 
     def AutoDrive(self, speed):
         leftValue = -robot.leftDriveEncoder.Get()*250.0/360.0 # real base
@@ -52,17 +64,6 @@ class RobotDrive(Subsystem):
         print("lenc: %s renc: %s lout: %s rout: %s" % (leftValue, rightValue, leftSpeed, rightSpeed))
         self.drive.TankDrive(leftSpeed, rightSpeed)
 
-    def OperatorControl(self):
-        if leftStick.GetTrigger():
-            self.ShiftDown()
-        if rightStick.GetTrigger():
-            self.ShiftUp()
-
-        if self.shiftTimer.Get() > .1:
-            self.ResetShift()
-
-        lPower = leftStick.GetY()
-        rPower = rightStick.GetY()
-
+    def TankDrive(self, lPower, rPower):
         self.drive.TankDrive(lPower, rPower)
 

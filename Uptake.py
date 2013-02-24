@@ -39,19 +39,8 @@ class RobotUptake(Subsystem):
         self.pid.SetSetpoint(prefs.UptakeFireSetpoint)
         self.pid.Enable()
 
-    def OperatorControl(self):
-        if coStick.GetRawButton(4):
-            self.PositionForIntake()
-        if coStick.GetRawButton(2):
-            self.PositionForArming()
-        if coStick.GetRawButton(1):
-            self.StartFiring()
+    def Stop(self):
+        self.pid.Disable()
 
-        mval = 0
-        if testStick.GetRawButton(3):
-            mval = testStick.GetY()
-            self.pid.Disable()
-
-        if not self.pid.IsEnabled():
-            robot.uptakeMotor.Set(mval)
-
+    def InIntakePosition(self):
+        return robot.uptakePot.GetAverageValue() > (prefs.UptakeIntakeSetpoint - 10)

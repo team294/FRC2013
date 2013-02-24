@@ -4,6 +4,3 @@ class Subsystem:
 
     def Init(self):
         pass
-
-    def OperatorControl(self):
-        pass

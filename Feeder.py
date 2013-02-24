@@ -16,9 +16,9 @@ class RobotFeeder(Subsystem):
         else:
             robot.feederMotor.Set(0)
 
-    def OperatorControl(self):
-        # clicking the button stops/starts
-        if testStick.GetRawButton(5) and not robot.lastTestButtons[5]:
-            self.running = not self.running
+    def Run(self):
+        self.running = True
 
-        self.SetOutputs()
+    def Stop(self):
+        self.running = False
+

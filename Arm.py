@@ -2,6 +2,7 @@ import wpilib
 from Globals import *
 from RobotSystem import *
 from util import Subsystem
+import threading
 
 class RobotArm(Subsystem):
     def __init__(self):
@@ -9,30 +10,41 @@ class RobotArm(Subsystem):
         self.armTimer = wpilib.Timer()
         self.armTimer.Start()
 
+        self.armDown = False
+
+        self.armLock = threading.Lock()
+        self.resetArmThread = threading.Thread(target=self._ResetArmThread,
+                name="ResetArmThread")
+        self.resetArmThread.start()
+
     def Init(self):
         self.armTimer.Reset()
 
     def Raise(self):
-        robot.armUp.Set(True)
-        robot.armDown.Set(False)
-        self.armTimer.Reset()
+        with self.armLock:
+            robot.armUp.Set(True)
+            robot.armDown.Set(False)
+            self.armTimer.Reset()
+        self.armDown = False
 
     def Lower(self):
-        robot.armUp.Set(False)
-        robot.armDown.Set(True)
-        self.armTimer.Reset()
+        with self.armLock:
+            robot.armUp.Set(False)
+            robot.armDown.Set(True)
+            self.armTimer.Reset()
+        self.armDown = True
 
-    def Reset(self):
-        robot.armUp.Set(False)
-        robot.armDown.Set(False)
+    def IsDown(self):
+        return self.armDown
 
-    def OperatorControl(self):
-        if testStick.GetRawButton(6):
-            self.Raise()
+    def IsUp(self):
+        return not self.armDown
 
-        if testStick.GetRawButton(7):
-            self.Lower()
-
-        if self.armTimer.Get() > .1:
-            self.Reset()
+    def _ResetArmThread(self):
+        while 1:
+            with self.armLock:
+                if self.armTimer.Get() > 0.2:
+                    robot.armUp.Set(False)
+                    robot.armDown.Set(False)
+            wpilib.Wait(0.1)
 

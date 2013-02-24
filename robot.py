@@ -1,6 +1,7 @@
 import wpilib
 from RobotSystem import *
 from Autonomous import *
+from OperatorControl import *
 #from ImageProcessing import StartImageServer
 from wpilib import SmartDashboard
 
@@ -15,6 +16,7 @@ class MyRobot(wpilib.SimpleRobot):
         #StartImageServer()
         robot.compressor.Start()
         self.auto = Autonomous()
+        self.operator = OperatorControl()
 
     def RobotInit(self):
         wpilib.Wait(0.1)
@@ -25,10 +27,11 @@ class MyRobot(wpilib.SimpleRobot):
 
         while self.IsDisabled():
             self.auto.ModeSelection()
-            robot.Disabled()
+            robot.UpdateLastButtons()
             wpilib.Wait(0.01)
 
     def Autonomous(self):
+        robot.Init()
         try:
             self.auto.Run()
         except:
@@ -39,24 +42,15 @@ class MyRobot(wpilib.SimpleRobot):
                 wpilib.Wait(0.04)
 
     def OperatorControl(self):
-        wpilib.GetWatchdog().SetExpiration(0.2)
-        wpilib.GetWatchdog().SetEnabled(True)
         robot.Init()
-
-        frame = 0
-        while self.IsOperatorControl() and self.IsEnabled():
-            wpilib.GetWatchdog().Feed()
-            robot.OperatorControl()
-            robot.UpdateDashboard()
-            wpilib.Wait(0.04)
-
-            if frame % 20 == 1:
-                print("gyroAngle:   %f" % robot.gyro.GetAngle())
-                print("dumbyPot:   %f" % robot.uptakePot.GetAverageValue())
-                print("elPot:   %f" % robot.elevationPot.GetAverageValue())
-                print("lEnc:    %d" % robot.leftDriveEncoder.Get())
-                print("rEnc:    %d" % robot.rightDriveEncoder.Get())
-            frame+= 1
+        try:
+            self.operator.Run()
+        except:
+            import traceback
+            import sys
+            traceback.print_exc(file=sys.stdout)
+            while self.IsOperatorControl() and self.IsEnabled():
+                wpilib.Wait(0.04)
 
 def run():
     logging.debug("starting run()")

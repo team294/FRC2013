@@ -16,10 +16,9 @@ class RobotConveyor(Subsystem):
         else:
             robot.conveyorMotor.Set(0)
 
-    def OperatorControl(self):
-        # clicking the button stops/starts
-        if testStick.GetRawButton(2) and not robot.lastTestButtons[2]:
-            self.running = not self.running
+    def Run(self):
+        self.running = True
 
-        self.SetOutputs()
+    def Stop(self):
+        self.running = False
 

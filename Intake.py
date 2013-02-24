@@ -16,9 +16,9 @@ class RobotIntake(Subsystem):
         else:
             robot.intakeMotor.Set(0)
 
-    def OperatorControl(self):
-        if testStick.GetRawButton(11) and not robot.lastTestButtons[11]:
-            self.running = not self.running
+    def Run(self):
+        self.running = True
 
-        self.SetOutputs()
+    def Stop(self):
+        self.running = False
 
