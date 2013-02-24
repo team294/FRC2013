@@ -6,10 +6,8 @@ from operator_control import *
 import logging
 
 class MyRobot(wpilib.SimpleRobot):
-    def __init__(self):
-        super().__init__()
-
-        # Create Subsystems
+    def RobotInit(self):
+        # Create subsystems
         logging.info("Creating subsystems")
         Robot.AddSubsystem("arm", RobotArm)
         Robot.AddSubsystem("drive", RobotDrive)
@@ -25,8 +23,7 @@ class MyRobot(wpilib.SimpleRobot):
         self.auto = Autonomous()
         self.operator = OperatorControl()
 
-    def RobotInit(self):
-        wpilib.Wait(0.1)
+        # Initialize subsystems
         Robot.InitSubsystems()
 
     def Disabled(self):
