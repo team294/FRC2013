@@ -53,14 +53,10 @@ class RobotSystem:
             self.gyro = wpilib.Gyro(1)
 
             ### Solenoids
-            self.shifterUp = wpilib.Solenoid(1)
-            self.shifterDown = wpilib.Solenoid(2)
-            self.armUp = wpilib.Solenoid(3)
-            self.armDown = wpilib.Solenoid(4)
-            self.flipper1 = wpilib.Solenoid(5)
-            self.flipper2 = wpilib.Solenoid(6)
-            self.climb1 = wpilib.Solenoid(7)
-            self.climb2 = wpilib.Solenoid(8)
+            self.shifterPiston = wpilib.DoubleSolenoid(1, 2)
+            self.armPiston = wpilib.DoubleSolenoid(3, 4)
+            self.flipperPiston = wpilib.DoubleSolenoid(5, 6)
+            self.climbPiston = wpilib.DoubleSolenoid(7, 8)
 
             ### Compressor
             self.compressor = wpilib.Compressor(1,1)

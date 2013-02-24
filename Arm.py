@@ -22,15 +22,13 @@ class RobotArm(Subsystem):
 
     def Raise(self):
         with self.armLock:
-            robot.armUp.Set(True)
-            robot.armDown.Set(False)
+            robot.armPiston.Set(wpilib.DoubleSolenoid.kForward)
             self.armTimer.Reset()
         self.armDown = False
 
     def Lower(self):
         with self.armLock:
-            robot.armUp.Set(False)
-            robot.armDown.Set(True)
+            robot.armPiston.Set(wpilib.DoubleSolenoid.kReverse)
             self.armTimer.Reset()
         self.armDown = True
 
@@ -44,7 +42,6 @@ class RobotArm(Subsystem):
         while 1:
             with self.armLock:
                 if self.armTimer.Get() > 0.2:
-                    robot.armUp.Set(False)
-                    robot.armDown.Set(False)
+                    robot.armPiston.Set(wpilib.DoubleSolenoid.kOff)
             wpilib.Wait(0.1)
 

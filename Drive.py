@@ -34,20 +34,17 @@ class RobotDrive(Subsystem):
         while 1:
             with self.shiftLock:
                 if self.shiftTimer.Get() > 0.2:
-                    robot.shifterUp.Set(False)
-                    robot.shifterDown.Set(False)
+                    robot.shifterPiston.Set(wpilib.DoubleSolenoid.kOff)
             wpilib.Wait(0.1)
 
     def ShiftDown(self):
         with self.shiftLock:
-            robot.shifterUp.Set(False)
-            robot.shifterDown.Set(True)
+            robot.shifterPiston.Set(wpilib.DoubleSolenoid.kReverse)
             self.shiftTimer.Reset()
 
     def ShiftUp(self):
         with self.shiftLock:
-            robot.shifterUp.Set(True)
-            robot.shifterDown.Set(False)
+            robot.shifterPiston.Set(wpilib.DoubleSolenoid.kForward)
             self.shiftTimer.Reset()
 
     def AutoDrive(self, speed):
