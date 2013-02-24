@@ -1,7 +1,7 @@
 import sys
 import logging
 
-logging.basicConfig(format='%(asctime)s.%(msecs)d %(message)s',
+logging.basicConfig(format='%(asctime)s.%(msecs)03d %(message)s',
         level=logging.DEBUG,
         datefmt='%M:%S')
 
