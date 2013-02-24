@@ -1,20 +1,18 @@
 import wpilib
-from Globals import *
-from RobotSystem import *
-from util import Subsystem
+from core import *
 
-class RobotIntake(Subsystem):
+class RobotIntake:
     def __init__(self):
-        super().__init__()
+        pass
 
     def Init(self):
         self.running = False
 
     def SetOutputs(self):
         if self.running:
-            robot.intakeMotor.Set(1)
+            Robot.intakeMotor.Set(1)
         else:
-            robot.intakeMotor.Set(0)
+            Robot.intakeMotor.Set(0)
 
     def Run(self):
         self.running = True

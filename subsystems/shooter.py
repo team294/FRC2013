@@ -1,19 +1,17 @@
 import wpilib
-from Globals import *
-from RobotSystem import *
-from util import Subsystem
+from core import *
 
-class RobotShooter(Subsystem):
+class RobotShooter:
     def __init__(self):
-        super().__init__()
+        pass
 
     def Init(self):
         self.frontVolts = 0
         self.backVolts = 0
 
     def SetOutputs(self):
-        robot.shooterFrontMotor.Set(-self.frontVolts)
-        robot.shooterBackMotor.Set(-self.backVolts)
+        Robot.shooterFrontMotor.Set(-self.frontVolts)
+        Robot.shooterBackMotor.Set(-self.backVolts)
 
     def SetTestSpeed(self):
         self.frontVolts = prefs.ShooterFrontTestVolts

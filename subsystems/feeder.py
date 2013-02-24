@@ -1,20 +1,18 @@
 import wpilib
-from Globals import *
-from RobotSystem import *
-from util import Subsystem
+from core import *
 
-class RobotConveyor(Subsystem):
+class RobotFeeder:
     def __init__(self):
-        super().__init__()
+        pass
 
     def Init(self):
         self.running = False
 
     def SetOutputs(self):
         if self.running:
-            robot.conveyorMotor.Set(1)
+            Robot.feederMotor.Set(1)
         else:
-            robot.conveyorMotor.Set(0)
+            Robot.feederMotor.Set(0)
 
     def Run(self):
         self.running = True

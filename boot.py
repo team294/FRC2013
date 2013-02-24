@@ -1,4 +1,9 @@
 import sys
+import logging
+
+logging.basicConfig(format='%(asctime)s.%(msecs)d %(message)s',
+        level=logging.INFO,
+        datefmt='%M:%S')
 
 class RollbackImporter:
     def __init__(self):
@@ -34,22 +39,22 @@ def main():
         rollback = RollbackImporter()
         robot = None
         try:
-            print("Importing user code.")
+            logging.info("Importing user code.")
             robot = __import__("robot")
-            print("Running user code.")
+            logging.info("Running user code.")
             robot.run()
             #runpy.run_module("robot", run_name="__main__")
         except SystemExit:
             pass
         except:
-            print("Exception in user code, type 'reboot' to restart:")
-            print("-"*60)
+            logging.error("Exception in user code, type 'reboot' to restart:")
+            logging.error("-"*60)
             traceback.print_exc(file=sys.stdout)
-            print("-"*60)
+            logging.error("-"*60)
             while 1:
                 time.sleep(5)
 
-        print("User code raised SystemExit; waiting 5 seconds before restart")
+        logging.critical("User code raised SystemExit; waiting 5 seconds before restart")
         time.sleep(5)
         sys.exc_traceback = None
         sys.last_traceback = None
