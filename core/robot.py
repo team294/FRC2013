@@ -36,8 +36,8 @@ class Robot:
         Robot.leftDriveEncoder = wpilib.Encoder(4,5,False)
         Robot.discIn = wpilib.DigitalInput(6)
         Robot.discOut = wpilib.DigitalInput(8)
-        Robot.shooterCounterBack = wpilib.Counter(9)
-        Robot.shooterCounterFront = wpilib.Counter(10)
+        Robot.backShooterCounter = wpilib.Counter(9)
+        Robot.frontShooterCounter = wpilib.Counter(10)
         Robot.uptakePot = wpilib.AnalogChannel(2)
         Robot.elevationPot = wpilib.AnalogChannel(3)
 
