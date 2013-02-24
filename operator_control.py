@@ -25,8 +25,8 @@ class OperatorControl:
 
             if frame % 20 == 1:
                 print("gyroAngle:   %f" % Robot.gyro.GetAngle())
-                print("dumbyPot:   %f" % Robot.uptakePot.GetAverageValue())
-                print("elPot:   %f" % Robot.elevationPot.GetAverageValue())
+                print("uptakePot:   %f" % Robot.uptakePot.GetAverageValue())
+                print("elvPot:   %f" % Robot.elevationPot.GetAverageValue())
                 print("lEnc:    %d" % Robot.leftDriveEncoder.Get())
                 print("rEnc:    %d" % Robot.rightDriveEncoder.Get())
             frame+= 1
@@ -65,8 +65,8 @@ class OperatorControl:
                 Robot.conveyor.Stop()
 
             # Override intake to stop if the uptake isn't in the right
-            # position
-            if not Robot.uptake.InIntakePosition():
+            # position or the arm is up
+            if not Robot.uptake.InIntakePosition() or not Robot.arm.IsDown():
                 Robot.intake.Stop()
                 Robot.conveyor.Stop()
 
