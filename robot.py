@@ -8,7 +8,6 @@ from myrobot import *
 
 def run():
     logging.info("Starting run()")
-    wpilib.SmartDashboard.init()
     logging.info("Initializing Robot")
     Robot.Init()
     logging.info("Initializing OI")
