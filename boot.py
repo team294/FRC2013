@@ -2,7 +2,7 @@ import sys
 import logging
 
 logging.basicConfig(format='%(asctime)s.%(msecs)d %(message)s',
-        level=logging.INFO,
+        level=logging.DEBUG,
         datefmt='%M:%S')
 
 class RollbackImporter:
