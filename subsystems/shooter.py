@@ -6,6 +6,8 @@ class RobotShooter:
         pass
 
     def Init(self):
+        Robot.shooterFrontMotor.SetVoltageRampRate(24.0/0.2)
+        Robot.shooterBackMotor.SetVoltageRampRate(24.0/0.2)
         self.frontVolts = 0
         self.backVolts = 0
 
