@@ -9,12 +9,9 @@ class Autonomous:
     positionName = {CENTER: "center", LEFT: "left", RIGHT: "right"}
     autoModes = [
         ("do nothing", "do nothing"),
-        ("Fender 3", "3 point from fender"),
-        ("Key 3", "3 point from key"),
-        ("Key 3 & lower", "3 point from key, lower bridge"),
-        ("Key 3 & intake", "3 point from key, intake from partners"),
-        ("Outtake", "outtake to partner"),
-        ("Fender 2", "score 2 point from fender"),
+        ("Front 2", "shoot 2 from front"),
+        ("Front 4", "shoot 2, pickup/shoot 2 from front"),
+        ("Back 3", "shoot 3 from back"),
         ("TEST 4ft", "TEST MODE 4 ft straight drive"),
         ]
 
