@@ -1,5 +1,6 @@
 import wpilib
 from core import *
+import logging
 from util.datalog import LoggingPIDController
 from util.PIDSources import PIDSourcePot
 from util.PIDOutputs import PIDOutputSpeed
@@ -10,7 +11,7 @@ class RobotUptake:
         self.pidOutput = PIDOutputSpeed(Robot.uptakeMotor, True)
         self.pid = wpilib.PIDController(prefs.UptakeP, prefs.UptakeI, prefs.UptakeD,
                 self.pidSource, self.pidOutput)#, port=8880)
-        #wpilib.SmartDashboard.PutData("uptake pid", self.pid)
+        wpilib.SmartDashboard.PutData("uptake pid", self.pid)
 
     def Init(self):
         self.pid.Disable()
