@@ -23,11 +23,11 @@ class OperatorControl:
             Robot.UpdateDashboard()
 
             if frame % 20 == 1:
-                print("gyroAngle:   %f" % Robot.gyro.GetAngle())
-                print("uptakePot:   %f" % Robot.uptakePot.GetAverageValue())
-                print("elvPot:   %f" % Robot.elevationPot.GetAverageValue())
-                print("lEnc:    %d" % Robot.leftDriveEncoder.Get())
-                print("rEnc:    %d" % Robot.rightDriveEncoder.Get())
+                logging.info("gyroAngle:   %f", Robot.gyro.GetAngle())
+                logging.info("uptakePot:   %f", Robot.uptakePot.GetAverageValue())
+                logging.info("elvPot:   %f", Robot.elevationPot.GetAverageValue())
+                logging.info("lEnc:    %d", Robot.leftDriveEncoder.Get())
+                logging.info("rEnc:    %d", Robot.rightDriveEncoder.Get())
             frame+= 1
 
             ###################
@@ -120,7 +120,7 @@ class OperatorControl:
             # Uptake
             mval = 0
             if OI.testStick.GetRawButton(3):
-                mval = OI.testStick.GetY()/2.0
+                mval = OI.testStick.GetY()/4.0
                 Robot.uptake.pid.Disable()
 
             if not Robot.uptake.pid.IsEnabled():
