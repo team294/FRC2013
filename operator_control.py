@@ -21,7 +21,6 @@ class OperatorControl:
             wpilib.GetWatchdog().Feed()
             wpilib.Wait(0.04)
             Robot.UpdateDashboard()
-            OI.UpdateLastButtons()
 
             if frame % 20 == 1:
                 print("gyroAngle:   %f" % Robot.gyro.GetAngle())
@@ -157,3 +156,6 @@ class OperatorControl:
             # State variables
             prevArmed = armed
             prevFiring = firing
+
+            OI.UpdateLastButtons()
+
