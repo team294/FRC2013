@@ -65,9 +65,9 @@ class OperatorControl:
 
             # Override intake to stop if the uptake isn't in the right
             # position or the arm is up
-            if not Robot.uptake.InIntakePosition() or not Robot.arm.IsDown():
-                Robot.intake.Stop()
-                Robot.conveyor.Stop()
+            #if not Robot.uptake.InIntakePosition() or not Robot.arm.IsDown():
+            #    Robot.intake.Stop()
+            #    Robot.conveyor.Stop()
 
             # Uptake / Feeder / Shooter
             armed = OI.coStick.GetRawButton(2)
@@ -120,17 +120,16 @@ class OperatorControl:
             # Uptake
             mval = 0
             if OI.testStick.GetRawButton(3):
-                mval = OI.testStick.GetY()/4.0
+                mval = OI.testStick.GetY()/3.0
                 Robot.uptake.pid.Disable()
-
             if not Robot.uptake.pid.IsEnabled():
                 Robot.uptakeMotor.Set(mval)
 
             # Elevation
             if OI.testStick.GetRawButton(8):
-                Robot.elevationMotorUnlimited.Set(OI.testStick.GetY())
+                Robot.elevationMotor.Set(OI.testStick.GetY())
             else:
-                Robot.elevationMotorUnlimited.Set(0)
+                Robot.elevationMotor.Set(0)
 
             # Feeder
             # clicking the button stops/starts
