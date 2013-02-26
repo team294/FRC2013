@@ -11,6 +11,7 @@ class CustomController:
         self.setpoint = 0
         self.error = 0
         self.result = 0
+        self.tolerance = 0.05
         self.controlLoop = wpilib.Notifier(self.Calculate)
         self.controlLoop.StartPeriodic(self.period)
 
@@ -42,6 +43,14 @@ class CustomController:
     def GetError(self):
         with self.mutex:
             return self.setpoint - self.source.PIDGet()
+
+    def SetAbsoluteTolerance(self, tol):
+        with self.mutex:
+            self.tolerance = tol
+
+    def OnTarget(self):
+        with self.mutex:
+            return abs(self.GetError()) < self.tolerance
 
 class AccelDecelController(CustomController):
     def __init__(self, ramp_thres, source, output, period=0.05):

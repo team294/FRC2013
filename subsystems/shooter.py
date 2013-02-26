@@ -57,8 +57,13 @@ class RobotShooter:
             return self.shooterspeeddata_struct.pack(self.shooterspeed, 1.0/robot.backShooterCounter.GetPeriod(), 1.0/avg)
 
     def SetOutputs(self):
-        Robot.shooterFrontMotor.Set(-self.frontVolts)
-        Robot.shooterBackMotor.Set(-self.backVolts)
+        with self.mutex:
+            if self.armed:
+                Robot.shooterFrontMotor.Set(-self.frontVolts)
+                Robot.shooterBackMotor.Set(-self.backVolts)
+            else:
+                Robot.shooterFrontMotor.Set(0)
+                Robot.shooterBackMotor.Set(0)
 
     def SetHighFrontCenter(self):
         self.frontVolts = prefs.ShooterFrontHighFrontCenterVolts
@@ -71,10 +76,6 @@ class RobotShooter:
     def SetTestSpeed(self):
         self.frontVolts = prefs.ShooterFrontTestVolts
         self.backVolts = prefs.ShooterBackTestVolts
-
-    def Stop(self):
-        self.frontVolts = 0
-        self.backVolts = 0
 
     def Arm(self):
         with self.mutex:
@@ -117,3 +118,5 @@ class RobotShooter:
         with self.mutex:
             self.firing = False
 
+    def OnTarget(self):
+        return self.armedTime.Get() > 1.5 # for now (no feedback)

@@ -12,6 +12,7 @@ class RobotElevation:
         self.pid = AccelDecelController(prefs.ElevRampThres, self.pidSource, self.pidOutput)
         #self.pid.SetInputRange(prefs.ElevBottomLimit, prefs.ElevTopLimit)
         #self.pid.SetTolerance(0.75)
+        self.pid.SetAbsoluteTolerance(2)
         #wpilib.SmartDashboard.PutData("elev pid", self.pid)
         self.manual = None
 
@@ -64,6 +65,9 @@ class RobotElevation:
     def SetStartPosition(self):
         self.pid.SetSetpoint(prefs.ElevStartSetpoint)
         self.pid.Enable()
+
+    def OnTarget(self):
+        return self.pid.OnTarget()
 
     def TweakDown(self):
         if self.pid.IsEnabled():

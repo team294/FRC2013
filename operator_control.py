@@ -12,7 +12,7 @@ class OperatorControl:
         Robot.conveyor.Stop()
         #Robot.uptake.PositionForIntake()
         Robot.feeder.Stop()
-        Robot.shooter.Stop()
+        Robot.shooter.StopArm()
 
         frame = 0
         prevArmed = False
@@ -80,14 +80,21 @@ class OperatorControl:
             # Uptake / Feeder / Shooter
             armed = OI.coStick.GetRawButton(2)
             firing = OI.coStick.GetRawButton(1)
+            # can't fire until on target
+            if not Robot.shooter.OnTarget() or not Robot.elevation.OnTarget():
+                firing = False
             if not armed:
                 firing = False
 
             # arming moves the uptake, and starts the shooter
+            # also stops intaking
             if armed and not prevArmed:
+                Robot.intake.Stop()
+                Robot.conveyor.Stop()
                 Robot.uptake.PositionForArming()
                 Robot.elevation.SetHighFrontCenter()
-                Robot.shooter.SetTestSpeed() # TODO
+                Robot.shooter.SetHighFrontCenter() # TODO
+                Robot.shooter.Arm()
 
             # firing starts the feeder, and moves the uptake after some delay
             if firing and not prevFiring:
@@ -105,7 +112,7 @@ class OperatorControl:
             if prevArmed and not armed:
                 Robot.uptake.PositionForIntake()
                 Robot.feeder.Stop()
-                Robot.shooter.Stop()
+                Robot.shooter.StopArm()
                 Robot.elevation.GoHome()
 
             #################
@@ -146,10 +153,11 @@ class OperatorControl:
                 Robot.feeder.running = not Robot.feeder.running
 
             # Shooter
-            #if OI.testStick.GetRawButton(10):
-            #    Robot.shooter.SetTestSpeed()
-            #else:
-            #    Robot.shooter.Stop()
+            if OI.testStick.GetRawButton(10):
+                Robot.shooter.SetTestSpeed()
+                Robot.shooter.Arm()
+            elif not OI.testStick.GetRawButton(10) and OI.lastTestButtons[10]:
+                Robot.shooter.StopArm()
 
             ########################
             # DRIVE NON-PID MOTORS #
