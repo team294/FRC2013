@@ -12,6 +12,7 @@ class CustomController:
         self.error = 0
         self.result = 0
         self.controlLoop = wpilib.Notifier(self.Calculate)
+        self.controlLoop.StartPeriodic(self.period)
 
     # PIDController-like interface
     def CalculateCallback(self, current, setpoint, result, error):
@@ -44,8 +45,8 @@ class CustomController:
 
 class AccelDecelController(CustomController):
     def __init__(self, ramp_thres, source, output, period=0.05):
-        super().__init__(source, output, period)
         self.ramp_thres = abs(ramp_thres)
+        super().__init__(source, output, period)
 
     def Calculate(self):
         with self.mutex:
@@ -58,7 +59,7 @@ class AccelDecelController(CustomController):
                 self.error = self.setpoint - current
                 if abs(self.error) > self.ramp_thres:
                     # Do full speed up until we hit the ramp threshold
-                    if self.error > 0:
+                    if self.error > 0.0:
                         self.result = 1.0
                     else:
                         self.result = -1.0

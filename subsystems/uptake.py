@@ -12,9 +12,32 @@ class RobotUptake:
         self.pid = wpilib.PIDController(prefs.UptakeP, prefs.UptakeI, prefs.UptakeD,
                 self.pidSource, self.pidOutput)#, port=8880)
         wpilib.SmartDashboard.PutData("uptake pid", self.pid)
+        self.manual = None
+        self.firing = False
 
     def Init(self):
         self.pid.Disable()
+
+    def SetManual(self, value):
+        self.manual = value
+
+    def SetOutputs(self):
+        mval = 0.0
+        if self.firing:
+            self.pid.Disable()
+            # if below the arm setpoint, drive up at full speed to get there
+            if self.pidSource.PIDGet() < prefs.UptakeFireSetpoint:
+                mval = 0.0
+            elif self.pidSource.PIDGet() < (prefs.UptakeArmSetpoint+20):
+                mval = prefs.UptakeFireOutputRange
+            else:
+                mval = 0.4
+            logging.debug("source=%s, mval=%s", self.pidSource.PIDGet(), mval)
+        if self.manual is not None:
+            self.pid.Disable()
+            mval = self.manual
+        if not self.pid.IsEnabled():
+            Robot.uptakeMotor.Set(mval)
 
     def PositionForIntake(self):
         self.pid.SetPID(prefs.UptakeIntakeP, prefs.UptakeIntakeI, prefs.UptakeIntakeD)
@@ -31,15 +54,20 @@ class RobotUptake:
         self.pid.Enable()
 
     def StartFiring(self):
-        self.pid.SetPID(prefs.UptakeFireP, prefs.UptakeFireI, prefs.UptakeFireD)
-        r = prefs.UptakeFireOutputRange
-        self.pid.SetOutputRange(-r, r)
-        self.pid.SetSetpoint(prefs.UptakeFireSetpoint)
-        self.pid.Enable()
+        self.firing = True
+        #self.pid.Disable()
+        #self.pid.SetPID(prefs.UptakeFireP, prefs.UptakeFireI, prefs.UptakeFireD)
+        #r = prefs.UptakeFireOutputRange
+        #self.pid.SetOutputRange(-r, r)
+        #self.pid.SetSetpoint(prefs.UptakeFireSetpoint)
+        #self.pid.Enable()
 
+    def StopFiring(self):
+        self.firing = False
 
     def Stop(self):
         self.pid.Disable()
 
     def InIntakePosition(self):
         return Robot.uptakePot.GetAverageValue() > (prefs.UptakeIntakeSetpoint - 10)
+

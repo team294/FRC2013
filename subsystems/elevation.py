@@ -9,16 +9,37 @@ class RobotElevation:
     def __init__(self):
         self.pidSource = PIDSourcePot(Robot.elevationPot)
         self.pidOutput = PIDOutputSpeed(Robot.elevationMotor, True)
-        self.pid = AccelDecelController(5, self.pidSource, self.pidOutput)
+        self.pid = AccelDecelController(prefs.ElevRampThres, self.pidSource, self.pidOutput)
         #self.pid.SetInputRange(prefs.ElevBottomLimit, prefs.ElevTopLimit)
         #self.pid.SetTolerance(0.75)
         #wpilib.SmartDashboard.PutData("elev pid", self.pid)
+        self.manual = None
 
     def Init(self):
         self.pid.Disable()
 
     def Stop(self):
         self.pid.Disable()
+
+    def SetManual(self, value):
+        self.manual = value
+
+    def SetOutputs(self):
+        mval = 0.0
+        if self.manual is not None:
+            self.pid.Disable()
+            mval = self.manual
+        if not self.pid.IsEnabled():
+            Robot.elevationMotor.Set(mval)
+
+    def IsArmUpOk(self):
+        return self.pidSource.PIDGet() < (prefs.ElevStartSetpoint+2)
+
+    def GoHome(self):
+        if Robot.arm.IsUp():
+            self.SetStartPosition()
+        else:
+            self.GoUnderPyramid()
 
     def GoUnderPyramid(self):
         self.pid.SetSetpoint(prefs.ElevUnderPyramidSetpoint)
@@ -38,6 +59,10 @@ class RobotElevation:
 
     def SetPyramid(self):
         self.pid.SetSetpoint(prefs.ElevPyramidSetpoint)
+        self.pid.Enable()
+
+    def SetStartPosition(self):
+        self.pid.SetSetpoint(prefs.ElevStartSetpoint)
         self.pid.Enable()
 
     def TweakDown(self):

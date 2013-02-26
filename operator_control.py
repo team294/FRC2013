@@ -69,6 +69,14 @@ class OperatorControl:
             #    Robot.intake.Stop()
             #    Robot.conveyor.Stop()
 
+            # Elevation
+            if OI.coStick.GetRawButton(4):
+                Robot.elevation.GoUnderPyramid()
+            elif OI.coStick.GetRawButton(3):
+                Robot.elevation.SetHighFrontCenter()
+            elif OI.coStick.GetRawButton(5):
+                Robot.elevation.SetStartPosition()
+
             # Uptake / Feeder / Shooter
             armed = OI.coStick.GetRawButton(2)
             firing = OI.coStick.GetRawButton(1)
@@ -78,6 +86,7 @@ class OperatorControl:
             # arming moves the uptake, and starts the shooter
             if armed and not prevArmed:
                 Robot.uptake.PositionForArming()
+                Robot.elevation.SetHighFrontCenter()
                 Robot.shooter.SetTestSpeed() # TODO
 
             # firing starts the feeder, and moves the uptake after some delay
@@ -88,7 +97,8 @@ class OperatorControl:
             # if we stopped firing, stop the feeder and uptake movement
             if prevFiring and not firing:
                 Robot.feeder.Stop()
-                Robot.uptake.Stop()
+                Robot.uptake.PositionForArming()
+                Robot.uptake.StopFiring()
 
             # if we unarmed, the uptake should go to intake position and
             # the shooter and feeder should stop running
@@ -96,6 +106,7 @@ class OperatorControl:
                 Robot.uptake.PositionForIntake()
                 Robot.feeder.Stop()
                 Robot.shooter.Stop()
+                Robot.elevation.GoHome()
 
             #################
             # TEST CONTROLS #
@@ -118,18 +129,16 @@ class OperatorControl:
                 Robot.conveyor.running = not Robot.conveyor.running
 
             # Uptake
-            mval = 0
             if OI.testStick.GetRawButton(3):
-                mval = OI.testStick.GetY()/3.0
-                Robot.uptake.pid.Disable()
-            if not Robot.uptake.pid.IsEnabled():
-                Robot.uptakeMotor.Set(mval)
+                Robot.uptake.SetManual(OI.testStick.GetY()/3.0)
+            else:
+                Robot.uptake.SetManual(None)
 
             # Elevation
             if OI.testStick.GetRawButton(8):
-                Robot.elevationMotor.Set(OI.testStick.GetY())
+                Robot.elevation.SetManual(OI.testStick.GetY())
             else:
-                Robot.elevationMotor.Set(0)
+                Robot.elevation.SetManual(None)
 
             # Feeder
             # clicking the button stops/starts
@@ -137,19 +146,20 @@ class OperatorControl:
                 Robot.feeder.running = not Robot.feeder.running
 
             # Shooter
-            if OI.testStick.GetRawButton(10):
-                Robot.shooter.SetTestSpeed()
-            else:
-                Robot.shooter.Stop()
+            #if OI.testStick.GetRawButton(10):
+            #    Robot.shooter.SetTestSpeed()
+            #else:
+            #    Robot.shooter.Stop()
 
             ########################
             # DRIVE NON-PID MOTORS #
             ########################
 
             Robot.intake.SetOutputs()
-            #Robot.elevation.SetOutputs()
             Robot.conveyor.SetOutputs()
+            Robot.uptake.SetOutputs()
             Robot.feeder.SetOutputs()
+            Robot.elevation.SetOutputs()
             Robot.shooter.SetOutputs()
 
             # State variables

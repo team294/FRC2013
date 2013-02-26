@@ -31,9 +31,7 @@ class Prefs:
             UptakeFireD=float,
             UptakeFireOutputRange=float,
             UptakeFireSetpoint=int,
-            ElevP=float,
-            ElevI=float,
-            ElevD=float,
+            ElevRampThres=float,
             ElevBottomLimit=int,
             ElevTopLimit=int,
             ElevUnderPyramidSetpoint=int,
@@ -41,6 +39,7 @@ class Prefs:
             ElevHighFrontCornerSetpoint=int,
             ElevHighBackCenterSetpoint=int,
             ElevPyramidSetpoint=int,
+            ElevStartSetpoint=int,
              )
 
     def __init__(self):
