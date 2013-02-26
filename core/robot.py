@@ -58,8 +58,12 @@ class Robot:
 
         ### Limited motors
         logging.info("Creating limited motors")
-        ##Robot.elevationMotor = PotLimitedSpeedController(Robot.elevationMotorUnlimited, Robot.elevationPot,
-                ##"ElevationTopLimit", "ElevationBottomLimit")
+        Robot.elevationMotor = PotLimitedSpeedController(
+                Robot.elevationMotorUnlimited,
+                Robot.elevationPot,
+                "ElevBottomLimit",
+                "ElevTopLimit",
+                inverted=True)
         Robot.uptakeMotor = PotLimitedSpeedController(
                 Robot.uptakeMotorUnlimited,
                 Robot.uptakePot,
