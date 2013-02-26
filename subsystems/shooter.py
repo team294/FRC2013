@@ -60,6 +60,14 @@ class RobotShooter:
         Robot.shooterFrontMotor.Set(-self.frontVolts)
         Robot.shooterBackMotor.Set(-self.backVolts)
 
+    def SetHighFrontCenter(self):
+        self.frontVolts = prefs.ShooterFrontHighFrontCenterVolts
+        self.backVolts = prefs.ShooterBackHighFrontCenterVolts
+
+    def SetHighFrontCorner(self):
+        self.frontVolts = prefs.ShooterFrontHighFrontCornerVolts
+        self.backVolts = prefs.ShooterBackHighFrontCornerVolts
+
     def SetTestSpeed(self):
         self.frontVolts = prefs.ShooterFrontTestVolts
         self.backVolts = prefs.ShooterBackTestVolts
