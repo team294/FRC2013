@@ -13,7 +13,7 @@ class RobotArm:
         #self.armDown = False
         self.armDown = True # XXX for LAB TESTING ONLY
 
-        self.armLock = threading.RLock()
+        self.mutex = threading.RLock()
         self.armThread = threading.Thread(target=self._ArmThread,
                 name="ArmThread")
         self.armThread.start()
@@ -23,7 +23,7 @@ class RobotArm:
         self.ForceElevationLimits()
 
     def ForceElevationLimits(self):
-        with self.armLock:
+        with self.mutex:
             if not self.armDown or self.doRaise:
                 Robot.elevationMotor.ForceHighLimit(prefs.ElevStartSetpoint)
             else:
@@ -31,14 +31,14 @@ class RobotArm:
 
     def Raise(self):
         # need to make sure the shooter is out of the way before actuating
-        with self.armLock:
+        with self.mutex:
             self.doRaise = True
             self.armDown = False
         self.ForceElevationLimits() # enforce tighter limits
         Robot.elevation.GoHome() # raise shooter
 
     def Lower(self):
-        with self.armLock:
+        with self.mutex:
             Robot.armPiston.Set(wpilib.DoubleSolenoid.kReverse)
             self.armTimer.Reset()
         # wait a little bit before allowing the shooter to move down
@@ -54,7 +54,7 @@ class RobotArm:
 
     def _ArmThread(self):
         while 1:
-            with self.armLock:
+            with self.mutex:
                 # handle raise commands
                 if self.doRaise:
                     if Robot.elevation.IsArmUpOk():
