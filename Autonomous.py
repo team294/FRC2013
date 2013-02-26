@@ -9,7 +9,7 @@ class Autonomous:
     positionName = {CENTER: "center", LEFT: "left", RIGHT: "right"}
     autoModes = [
         ("do nothing", "do nothing"),
-        ("Front 2", "shoot 2 from front"),
+        ("Front 2", "shoot 2 from front"), #1
         ("Front 4", "shoot 2, pickup/shoot 2 from front"),
         ("Back 3", "shoot 3 from back"),
         ("TEST 4ft", "TEST MODE 4 ft straight drive"),
@@ -81,6 +81,7 @@ class Autonomous:
 
         if display:
             self.DisplayMode()
+            
 
     def Run(self):
         wpilib.GetWatchdog().SetExpiration(1.0)
@@ -107,7 +108,7 @@ class Autonomous:
             driveSpeed = 0.0
             driveTurn = 0.0
 
-            if self.autoMode == 1:
+            if self.autoMode == 3:
                 # fender 3-point
                 if state == 0:
                     # Start delay
@@ -152,6 +153,47 @@ class Autonomous:
                     Robot.shooter.StopFire()
                     Robot.shooter.StopArm()
 
+            # Shoot Two Front of pyramid
+            if self.autoMode == 1:
+                if state == 0:
+                    # Start Delay
+                    if deltaTime.Get() > self.startDelay:
+                        state = 1
+                elif state == 1:
+                    Robot.arm.Lower()
+                    state = 2
+                elif state == 2:
+                    Robot.elevation.SetHighFrontCenter()
+                    state = 3
+                elif state == 3:
+                    Robot.shooter.Arm()
+                    state = 4
+                elif state == 4:
+                    Robot.shooter.SetHighFrontCenter()
+                    Robot.shooter.Fire()
+                    state = 5
+                elif state == 5:
+                    Robot.feeder.Run()
+                    Robot.uptake.PositionForArming()
+                    state = 6
+                elif state == 6:
+                    Robot.uptake.StartFiring()
+                    if deltaTime.Get() > 3.0:
+                        state = 7
+                elif state == 7:
+                    Robot.uptake.PositionForIntake()
+                    state = 8
+                elif state == 8:
+                    Robot.uptake.Stop()
+                    Robot.feeder.Stop()
+                    Robot.shooter.StopFire()
+                    Robot.shooter.StopArm()
+                    Robot.shooter.Stop()
+
+            if self.autoMode == 4:
+                pass
+            if self.autoMode == 5:
+                pass
             if self.autoMode == 7:
                 # test drive 4 feet
                 if state == 0:
