@@ -1,4 +1,5 @@
 import wpilib
+import logging
 
 class PotLimitedSpeedController(wpilib.SpeedController):
     def __init__(self, output, pot, lowLimitPref, highLimitPref, inverted=False, failsafe=True):
@@ -17,7 +18,7 @@ class PotLimitedSpeedController(wpilib.SpeedController):
         highLimit = self.prefs.GetDouble(self.highLimitPref)
         #if lowLimit > highLimit:
         #    lowLimit, highLimit = highLimit, lowLimit
-        #print("speed: %f value: %d lowLimit: %d highLimit: %d inv: %d" % (speed, potValue, lowLimit, highLimit, self.inverted))
+        #logging.debug("speed: %f value: %d lowLimit: %d highLimit: %d inv: %d", speed, potValue, lowLimit, highLimit, self.inverted)
         # if pot disconnected, don't let it drive at all
         if self.failsafe and potValue < 0:
             self.output.Set(0, syncGroup)
