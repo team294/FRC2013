@@ -3,20 +3,19 @@ from core import *
 from util.datalog import LoggingPIDController
 from util.PIDSources import PIDSourcePot
 from util.PIDOutputs import PIDOutputSpeed
+from util.CustomControllers import AccelDecelController
 
 class RobotElevation:
     def __init__(self):
         self.pidSource = PIDSourcePot(Robot.elevationPot)
-        #self.pidOutput = PIDOutputSpeed(Robot.elevationMotor, True)
-        #self.pid = wpilib.PIDController(prefs.ElevP, prefs.ElevI, prefs.ElevD,
-        #        self.pidSource, self.pidOutput)#, port=8888)
+        self.pidOutput = PIDOutputSpeed(Robot.elevationMotor, True)
+        self.pid = AccelDecelController(5, self.pidSource, self.pidOutput)
         #self.pid.SetInputRange(prefs.ElevBottomLimit, prefs.ElevTopLimit)
         #self.pid.SetTolerance(0.75)
         #wpilib.SmartDashboard.PutData("elev pid", self.pid)
 
     def Init(self):
-        #self.pid.Disable()
-        pass
+        self.pid.Disable()
 
     def Stop(self):
         self.pid.Disable()
@@ -45,8 +44,12 @@ class RobotElevation:
         if self.pid.IsEnabled():
             self.pid.SetSetpoint(self.pid.GetSetpoint()-10)
         else:
-            self.pid.SetSetpoint(self.pid.GetSetpoint()-10)
+            self.pid.SetSetpoint(self.pidSource.PIDGet()-10)
             self.pid.Enable()
 
     def TweakUp(self):
-        pass
+        if self.pid.IsEnabled():
+            self.pid.SetSetpoint(self.pid.GetSetpoint()+10)
+        else:
+            self.pid.SetSetpoint(self.pidSource.PIDGet()+10)
+            self.pid.Enable()

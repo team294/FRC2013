@@ -37,6 +37,7 @@ class RobotUptake:
         self.pid.SetSetpoint(prefs.UptakeFireSetpoint)
         self.pid.Enable()
 
+
     def Stop(self):
         self.pid.Disable()
 
