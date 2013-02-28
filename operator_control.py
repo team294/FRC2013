@@ -10,6 +10,7 @@ class OperatorControl:
         # Startup conditions for teleop
         Robot.intake.Stop()
         Robot.conveyor.Stop()
+        Robot.uptake.StopFiring()
         #Robot.uptake.PositionForIntake()
         Robot.feeder.Stop()
         Robot.shooter.StopArm()

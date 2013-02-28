@@ -25,12 +25,14 @@ class RobotUptake:
         mval = 0.0
         if self.firing:
             self.pid.Disable()
-            # if below the arm setpoint, drive up at full speed to get there
             if self.pidSource.PIDGet() < prefs.UptakeFireSetpoint:
+                # hit the top
                 mval = 0.0
             elif self.pidSource.PIDGet() < (prefs.UptakeArmSetpoint+20):
+                # feed the feeder
                 mval = prefs.UptakeFireOutputRange
             else:
+                # if below the arm setpoint, drive up at "full" speed
                 mval = 0.4
             logging.debug("source=%s, mval=%s", self.pidSource.PIDGet(), mval)
         if self.manual is not None:

@@ -108,7 +108,7 @@ class Autonomous:
             driveSpeed = 0.0
             driveTurn = 0.0
 
-            if self.autoMode == 3:
+            if self.autoMode == 9:
                 # fender 3-point
                 if state == 0:
                     # Start delay
@@ -152,7 +152,20 @@ class Autonomous:
                 elif state == 8:
                     Robot.shooter.StopFire()
                     Robot.shooter.StopArm()
-
+            # Intake Two shoot 4 from the front corner
+            if self.autoMode == 3:
+                if state == 0:
+                    #Start Delay
+                    if deltaTime.Get() > self.startDelay:
+                        state = 10
+                elif state == 10:
+                    Robot.arm.Lower()
+                    state = 20
+                elif state == 20:
+                    if Robot.arm.IsDown():
+                        state = 30
+                elif state == 30:
+                    pass
             # Shoot Two Front of pyramid
             if self.autoMode == 1:
                 if state == 0:
@@ -163,22 +176,23 @@ class Autonomous:
                     Robot.arm.Lower()
                     state = 2
                 elif state == 2:
-                    Robot.elevation.SetHighFrontCenter()
-                    state = 3
+                    if Robot.arm.IsDown():
+                        state = 3
                 elif state == 3:
-                    Robot.shooter.Arm()
+                    Robot.elevation.SetHighFrontCenter()
                     state = 4
                 elif state == 4:
                     Robot.shooter.SetHighFrontCenter()
-                    Robot.shooter.Fire()
+                    Robot.shooter.Arm()
                     state = 5
                 elif state == 5:
                     Robot.feeder.Run()
                     Robot.uptake.PositionForArming()
-                    state = 6
+                    if Robot.elevation.OnTarget():
+                        state = 6
                 elif state == 6:
                     Robot.uptake.StartFiring()
-                    if deltaTime.Get() > 3.0:
+                    if deltaTime.Get() > 8.0:
                         state = 7
                 elif state == 7:
                     Robot.uptake.PositionForIntake()
@@ -186,9 +200,53 @@ class Autonomous:
                 elif state == 8:
                     Robot.uptake.Stop()
                     Robot.feeder.Stop()
-                    Robot.shooter.StopFire()
                     Robot.shooter.StopArm()
-                    Robot.shooter.Stop()
+
+            # Intake 2 Back Up shoot 4
+            if self.autoMode == 2:
+                if state == 0:
+                    # Start Delay
+                    if deltaTime.Get()> self.startDelay:
+                        state = 10
+                elif state == 10:
+                    Robot.arm.Lower()
+                    Robot.intake.Run()
+                    Robot.conveyor.Run()
+                    Robot.uptake.PositionForIntake()
+                    state = 2
+                elif state == 20:
+                    driveSpeed = None
+                    Robot.drive.AutoDrive(0.75)
+                    if Robot.rightDriveEncoder.GetDistance() < 72:
+                        state = 30
+                elif state == 30:
+                    driveSpeed = None
+                    Robot.drive.AutoDrive(.75)
+                    if Robot.rightDriveEncoder.GetDistance() < -72:
+                        state = 40
+                elif state == 40:
+                    Robot.elevation.SetHighFrontCenter()
+                    Robot.shooter.Arm()
+                    Robot.shooter.SetHighFrontCenter()
+                    state = 50
+                elif state == 50:
+                    Robot.shooter.Fire()
+                    state = 60
+                elif state == 60:
+                    Robot.feeder.Run()
+                    Robot.uptake.PositionForAiming()
+                    state = 70
+                elif state == 70:
+                    Robot.uptake.StartFiring()
+                    if deltaTime.Get() > 5.0:
+                        state = 80
+                elif state == 80:
+                    Robot.uptake.PositionForIntake()
+                    Robot.uptake.Stop()
+                    Robot.feeder.Stop()
+                    Robot.shooter.StopFiring()
+                    Robot.shooter.StopArm()
+                    state = 90
 
             if self.autoMode == 4:
                 pass
@@ -204,6 +262,13 @@ class Autonomous:
                     print("Right encoder: %d" % Robot.rightDriveEncoder.Get())
                     if Robot.rightDriveEncoder.GetDistance() < -48:
                         state = 1
+
+            Robot.intake.SetOutputs()
+            Robot.conveyor.SetOutputs()
+            Robot.uptake.SetOutputs()
+            Robot.feeder.SetOutputs()
+            Robot.elevation.SetOutputs()
+            Robot.shooter.SetOutputs()
 
             # drive commands
             if driveSpeed is not None:

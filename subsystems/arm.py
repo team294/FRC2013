@@ -10,8 +10,8 @@ class RobotArm:
         self.doRaise = False
         self.lowerTimer = wpilib.Timer()
 
-        #self.armDown = False
-        self.armDown = True # XXX for LAB TESTING ONLY
+        self.armDown = False
+        #self.armDown = True # XXX for LAB TESTING ONLY
 
         self.mutex = threading.RLock()
         self.armThread = threading.Thread(target=self._ArmThread,

@@ -1,4 +1,5 @@
 import wpilib
+import logging
 from core import *
 from util.datalog import LoggingPIDController
 from util.PIDSources import PIDSourcePot
@@ -14,10 +15,10 @@ class RobotElevation:
         #self.pid.SetTolerance(0.75)
         self.pid.SetAbsoluteTolerance(2)
         #wpilib.SmartDashboard.PutData("elev pid", self.pid)
-        self.manual = None
 
     def Init(self):
         self.pid.Disable()
+        self.manual = None
 
     def Stop(self):
         self.pid.Disable()
@@ -67,6 +68,11 @@ class RobotElevation:
         self.pid.Enable()
 
     def OnTarget(self):
+        logging.debug("cur: %s setpoint: %s error: %s ontarget: %s",
+                self.pidSource.PIDGet(),
+                self.pid.GetSetpoint(),
+                self.pid.GetError(),
+                self.pid.OnTarget())
         return self.pid.OnTarget()
 
     def TweakDown(self):
