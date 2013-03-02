@@ -11,7 +11,7 @@ class OperatorControl:
         Robot.intake.Stop()
         Robot.conveyor.Stop()
         Robot.uptake.StopFiring()
-        #Robot.uptake.PositionForIntake()
+        Robot.uptake.PositionForIntake()
         Robot.feeder.Stop()
         Robot.shooter.StopArm()
 
@@ -71,12 +71,12 @@ class OperatorControl:
             #    Robot.conveyor.Stop()
 
             # Elevation
-            if OI.coStick.GetRawButton(4):
-                Robot.elevation.GoUnderPyramid()
-            elif OI.coStick.GetRawButton(3):
-                Robot.elevation.SetHighFrontCenter()
-            elif OI.coStick.GetRawButton(5):
-                Robot.elevation.SetStartPosition()
+            #if OI.coStick.GetRawButton(4):
+            #    Robot.elevation.GoUnderPyramid()
+            #elif OI.coStick.GetRawButton(3):
+            #    Robot.elevation.SetHighFrontCenter()
+            #elif OI.coStick.GetRawButton(5):
+            #    Robot.elevation.SetStartPosition()
 
             # Uptake / Feeder / Shooter
             armed = OI.coStick.GetRawButton(2)
@@ -119,7 +119,7 @@ class OperatorControl:
             # Manual Uptake
             if OI.coStick.GetRawButton(3):
                 Robot.uptake.SetManual(OI.coStick.GetY()/2.0)
-            else:
+            if not OI.coStick.GetRawButton(3) and OI.lastCoButtons[3]:
                 Robot.uptake.SetManual(None)
 
             # Manual Elevation (tweak)
@@ -149,15 +149,15 @@ class OperatorControl:
                 Robot.conveyor.running = not Robot.conveyor.running
 
             # Uptake
-            if OI.testStick.GetRawButton(3):
+            if OI.testStick.GetRawButton(3) and not OI.lastTestButtons[3]:
                 Robot.uptake.SetManual(OI.testStick.GetY()/2.0)
-            else:
+            if not OI.testStick.GetRawButton(3) and OI.lastTestButtons[3]:
                 Robot.uptake.SetManual(None)
 
             # Elevation
             if OI.testStick.GetRawButton(8):
                 Robot.elevation.SetManual(OI.testStick.GetY())
-            else:
+            if not OI.testStick.GetRawButton(8) and OI.lastTestButtons[8]:
                 Robot.elevation.SetManual(None)
 
             # Feeder
