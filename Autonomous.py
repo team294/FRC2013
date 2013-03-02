@@ -188,7 +188,7 @@ class Autonomous:
                 elif state == 5:
                     Robot.feeder.Run()
                     Robot.uptake.PositionForArming()
-                    if Robot.elevation.OnTarget():
+                    if Robot.elevation.OnTarget() and deltaTime.Get() > 2.0:
                         state = 6
                 elif state == 6:
                     Robot.uptake.StartFiring()
@@ -213,7 +213,9 @@ class Autonomous:
                     Robot.intake.Run()
                     Robot.conveyor.Run()
                     Robot.uptake.PositionForIntake()
-                    state = 2
+                    state = 15
+                elif state == 15:
+                    pass
                 elif state == 20:
                     driveSpeed = None
                     Robot.drive.AutoDrive(0.75)
