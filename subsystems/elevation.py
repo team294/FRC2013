@@ -77,14 +77,14 @@ class RobotElevation:
 
     def TweakDown(self):
         if self.pid.IsEnabled():
-            self.pid.SetSetpoint(self.pid.GetSetpoint()-10)
+            self.pid.SetSetpoint(self.pid.GetSetpoint()+4)
         else:
-            self.pid.SetSetpoint(self.pidSource.PIDGet()-10)
+            self.pid.SetSetpoint(self.pidSource.PIDGet()+4)
             self.pid.Enable()
 
     def TweakUp(self):
         if self.pid.IsEnabled():
-            self.pid.SetSetpoint(self.pid.GetSetpoint()+10)
+            self.pid.SetSetpoint(self.pid.GetSetpoint()-4)
         else:
-            self.pid.SetSetpoint(self.pidSource.PIDGet()+10)
+            self.pid.SetSetpoint(self.pidSource.PIDGet()-4)
             self.pid.Enable()
