@@ -14,6 +14,8 @@ class RobotUptake:
         wpilib.SmartDashboard.PutData("uptake pid", self.pid)
         self.manual = None
         self.firing = False
+        self.lastPotReadTime = wpilib.Timer()
+        self.lastPotReadTime.Start()
 
     def Init(self):
         self.pid.Disable()
@@ -28,9 +30,23 @@ class RobotUptake:
             if self.pidSource.PIDGet() < prefs.UptakeFireSetpoint:
                 # hit the top
                 mval = 0.0
-            elif self.pidSource.PIDGet() < (prefs.UptakeArmSetpoint+20):
+            elif self.pidSource.PIDGet() < (prefs.UptakeArmSetpoint-25):
                 # feed the feeder
                 mval = prefs.UptakeFireOutputRange
+                # do basic speed control of pot
+                if self.lastPotReadTime.Get() > 0.3:
+                    self.lastPotReadTime.Reset()
+                    thisPot = self.pidSource.PIDGet()
+                    if thisPot > 0:
+                        if abs(thisPot - self.lastPot) < 5:
+                            self.delta += 0.01
+                        else:
+                            self.delta = 0
+                        self.lastPot = thisPot
+                mval += self.delta
+            #elif self.pidSource.PIDGet() < (prefs.UptakeArmSetpoint+15):
+            #    # feed the feeder
+            #    mval = 0.5
             else:
                 # if below the arm setpoint, drive up at "full" speed
                 mval = 0.4
@@ -39,6 +55,7 @@ class RobotUptake:
             self.pid.Disable()
             mval = self.manual
         if not self.pid.IsEnabled():
+            logging.debug("driving uptake motor")
             Robot.uptakeMotor.Set(mval)
 
     def PositionForIntake(self):
@@ -57,6 +74,9 @@ class RobotUptake:
 
     def StartFiring(self):
         self.firing = True
+        self.lastPot = self.pidSource.PIDGet()
+        self.lastPotReadTime.Reset()
+        self.delta = 0.0
         #self.pid.Disable()
         #self.pid.SetPID(prefs.UptakeFireP, prefs.UptakeFireI, prefs.UptakeFireD)
         #r = prefs.UptakeFireOutputRange
