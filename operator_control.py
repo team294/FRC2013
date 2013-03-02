@@ -116,6 +116,18 @@ class OperatorControl:
                 Robot.shooter.StopArm()
                 Robot.elevation.GoHome()
 
+            # Manual Uptake
+            if OI.coStick.GetRawButton(3):
+                Robot.uptake.SetManual(OI.coStick.GetY()/2.0)
+            else:
+                Robot.uptake.SetManual(None)
+
+            # Manual Elevation (tweak)
+            if OI.coStick.GetRawButton(4) and not OI.lastCoButtons[4]:
+                Robot.elevation.TweakDown()
+            if OI.coStick.GetRawButton(5) and not OI.lastCoButtons[5]:
+                Robot.elevation.TweakUp()
+
             #################
             # TEST CONTROLS #
             #################
@@ -138,7 +150,7 @@ class OperatorControl:
 
             # Uptake
             if OI.testStick.GetRawButton(3):
-                Robot.uptake.SetManual(OI.testStick.GetY()/3.0)
+                Robot.uptake.SetManual(OI.testStick.GetY()/2.0)
             else:
                 Robot.uptake.SetManual(None)
 
