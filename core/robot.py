@@ -21,13 +21,15 @@ class Robot:
         #shooter
         Robot.shooterFrontMotor = wpilib.CANJaguar(1, wpilib.CANJaguar.kVoltage)
         Robot.shooterBackMotor = wpilib.CANJaguar(2, wpilib.CANJaguar.kVoltage)
-        Robot.elevationMotorUnlimited = wpilib.CANJaguar(5)
+        Robot.elevationMotorUnlimited = wpilib.Victor(3)
+        #Robot.elevationMotorUnlimited = wpilib.CANJaguar(5)
 
         ### Victors
         logging.info("Creating Victors")
         Robot.intakeMotor = wpilib.Victor(1)
         Robot.conveyorMotor = wpilib.Victor(2)
-        Robot.uptakeMotorUnlimited = wpilib.Victor(3)
+        #Robot.uptakeMotorUnlimited = wpilib.Victor(3)
+        Robot.uptakeMotorUnlimited = wpilib.CANJaguar(5)
         Robot.feederMotor = wpilib.Victor(4)
 
         ### Inputs
@@ -46,8 +48,8 @@ class Robot:
 
         ### Solenoids
         logging.info("Creating solenoids")
-        Robot.shifterPiston = wpilib.DoubleSolenoid(1, 2)
-        Robot.armPiston = wpilib.DoubleSolenoid(3, 4)
+        Robot.shifterPiston = wpilib.DoubleSolenoid(2, 1)
+        Robot.armPiston = wpilib.DoubleSolenoid(4, 3)
         Robot.flipperPiston = wpilib.DoubleSolenoid(5, 6)
         Robot.climbPiston = wpilib.DoubleSolenoid(7, 8)
 
