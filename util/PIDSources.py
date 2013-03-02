@@ -7,8 +7,8 @@ class PIDSourcePot(wpilib.PIDSource):
 
     def PIDGet(self):
         val = self.pot.GetAverageValue()
-        if val < 0:
-            return None
+        #if val < 0:
+        #    return None
         return val
 
 class PIDSourceEncoder(wpilib.PIDSource):
