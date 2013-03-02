@@ -12,13 +12,13 @@ class RobotUptake:
         self.pid = wpilib.PIDController(prefs.UptakeP, prefs.UptakeI, prefs.UptakeD,
                 self.pidSource, self.pidOutput)#, port=8880)
         wpilib.SmartDashboard.PutData("uptake pid", self.pid)
-        self.manual = None
-        self.firing = False
         self.lastPotReadTime = wpilib.Timer()
         self.lastPotReadTime.Start()
 
     def Init(self):
         self.pid.Disable()
+        self.manual = None
+        self.firing = False
 
     def SetManual(self, value):
         self.manual = value
@@ -55,7 +55,7 @@ class RobotUptake:
             self.pid.Disable()
             mval = self.manual
         if not self.pid.IsEnabled():
-            logging.debug("driving uptake motor")
+            logging.debug("driving uptake motor mval %s", mval)
             Robot.uptakeMotor.Set(mval)
 
     def PositionForIntake(self):
