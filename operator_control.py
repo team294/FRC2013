@@ -110,11 +110,13 @@ class OperatorControl:
 
             # if we unarmed, the uptake should go to intake position and
             # the shooter and feeder should stop running
+            # We also start running the intake again
             if prevArmed and not armed:
                 Robot.uptake.PositionForIntake()
                 Robot.feeder.Stop()
                 Robot.shooter.StopArm()
                 Robot.elevation.GoHome()
+                Robot.intake.Run()
 
             # Manual Uptake
             if OI.coStick.GetRawButton(3):
