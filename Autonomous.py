@@ -188,7 +188,7 @@ class Autonomous:
                 elif state == 5:
                     Robot.feeder.Run()
                     Robot.uptake.PositionForArming()
-                    if Robot.elevation.OnTarget() and deltaTime.Get() > 2.0:
+                    if Robot.elevation.OnTarget() and deltaTime.Get() > 4.0:
                         state = 6
                 elif state == 6:
                     Robot.uptake.StartFiring()
